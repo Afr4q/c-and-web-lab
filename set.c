@@ -1,154 +1,135 @@
-#include<stdio.h>
+#include <stdio.h>
 
-int main()
+int ucheck(int ar[], int data, int size)
 {
-    int u[10]={1,2,3,4,5,6,7,8,9,10};
-    int bit1[10]={0},bit2[10]={0};
-    int size1,size2,i,temp,flag,j;
-    for (i = 0; i < 10; i++)
+    for (int i = 0; i < size; i++)
     {
-        if (i==0)
+        if (ar[i] == data)
         {
-            printf("U={");
+            return 1;
         }
-        printf("%d",u[i]);
-        if (i==9)
-        {
-            printf("}");
-            break;
-        }
-        printf(",");
     }
-    printf("\nEnter the size first set : ");
-    scanf("%d",&size1);
-    int s1[size1];
-    printf("Enter the first set\n");
-    i=0;
-    while (i<size1)
+    return 0;
+}
+
+int scheck(int ar[], int data, int size)
+{
+    for (int i = 0; i < size; i++)
     {
-        flag=0;
-        printf("Element %d :",i+1);
-        scanf("%d",&temp);
-        for ( j = 0; j < 10;j++)
+        if (ar[i] == data)
         {
-            if (temp==u[j])
-            {
-                flag=1;
-                break;
-            }
+            return 0;
         }
-        for (int i = 0; i < size1; i++)
+    }
+    return 1;
+}
+
+void main()
+{
+    int u[20], s1[20], s2[20], bs1[20], bs2[20], and[20], or [20], usize, s1size, s2size, i, j, data, flag1, flag2;
+    printf("Enter the size of universal set : ");
+    scanf("%d", &usize);
+    for (i = 0; i < usize; i++)
+    {
+        printf("Enter Element %d : ", i);
+        scanf("%d", &u[i]);
+        bs1[i] = 0;
+        bs2[i] = 0;
+    }
+    printf("enter the size of first set : ");
+    scanf("%d", &s1size);
+    i = 0;
+    while (i < s1size)
+    {
+        flag1 = 0, flag2 = 0;
+        printf("Enter Element %d : ", i);
+        scanf("%d", &data);
+        if (ucheck(u, data, usize) && scheck(s1, data, s1size))
         {
-            if (temp==s1[i])
-            {
-                flag=2;
-                break;
-            } 
-        }
-        if (flag==1)
-        {
-            s1[i]=temp;
+            s1[i] = data;
             i++;
         }
-        if (flag==0)
+        else
         {
-            printf("Enter element from Universal set!!!\n");
-        }
-        if (flag==2)
-        {
-            printf("Element already in the set!!!\n");
+            printf("element already in the set or not in universal set!!!!\n");
         }
     }
-    for ( i = 0; i < 10; i++)
+    printf("enter the size of second set : ");
+    scanf("%d", &s2size);
+    i = 0;
+    while (i < s2size)
     {
-        for (j = 0; j < size1; j++)
+        printf("Enter Element %d : ", i);
+        scanf("%d", &data);
+        if (ucheck(u, data, usize) && scheck(s2, data, s2size))
         {
-            if (u[i]==s1[j])
-            {
-                bit1[i]=1;
-            }
-        }  
-    }
-    printf("bitstring of set1 : ");
-    for (i = 0; i < 10; i++)
-    {
-        printf("%d",bit1[i]);
-    }
-    printf("\nEnter the size second set : ");
-    scanf("%d",&size2);
-    int s2[size2];
-    printf("Enter the second set\n");
-    i=0;
-    while (i<size2)
-    {
-        flag=0;
-        printf("Element %d :",i+1);
-        scanf("%d",&temp);
-        for ( j = 0; j < 10;j++)
-        {
-            if (temp==u[j])
-            {
-                flag=1;
-                break;
-            }
-        }
-        for (int i = 0; i < size2; i++)
-        {
-            if (temp==s2[i])
-            {
-                flag=2;
-                break;
-            } 
-        }
-        if (flag==1)
-        {
-            s2[i]=temp;
+            s2[i] = data;
             i++;
         }
-        if (flag==0)
+        else
         {
-            printf("Enter element from Universal set!!!\n");
+            printf("element already in the set or not in universal set!!!!\n");
         }
     }
-    for ( i = 0; i < 10; i++)
+    for (i = 0; i < s1size; i++)
     {
-        for (j = 0; j < size2; j++)
+        for (j = 0; j < usize; j++)
         {
-            if (u[i]==s2[j])
+            if (s1[i] == u[j])
             {
-                bit2[i]=1;
+                bs1[j] = 1;
             }
-        }  
-    }
-    printf("bitstring of set2 : ");
-    for (i = 0; i < 10; i++)
-    {
-        printf("%d",bit2[i]);
-    }
-    int ubit[10]={0};
-    for ( i = 0; i < 10; i++)
-    {
-        if (bit1[i]==1 || bit2[i]==1)
-        {
-            ubit[i]=1;
         }
     }
-    printf("\nUnion of set1 and set2 : ");
-    for (i = 0; i < 10; i++)
+    for (i = 0; i < s2size; i++)
     {
-        printf("%d",ubit[i]);
-    }   
-    int ibit[10]={0};
-    for ( i = 0; i < 10; i++)
-    {
-        if (bit1[i]==1 && bit2[i]==1)
+        for (j = 0; j < usize; j++)
         {
-            ibit[i]=1;
+            if (s2[i] == u[j])
+            {
+                bs2[j] = 1;
+            }
         }
     }
-    printf("\nIntersection of set1 and set2 : ");
-    for (i = 0; i < 10; i++)
+    for ( i = 0; i < usize; i++)
     {
-        printf("%d",ibit[i]);
-    }   
+        and[i]=bs1[i] & bs2[i];
+        or[i]=bs1[i] | bs2[i];
+    }
+    
+    printf("Universal Set : ");
+    for (i = 0; i < usize; i++)
+    {
+        printf("%d ", u[i]);
+    }
+    printf("\nSet 1 : ");
+    for (i = 0; i < s1size; i++)
+    {
+        printf("%d ", s1[i]);
+    }
+    printf("\nSet 2 : ");
+    for (i = 0; i < s2size; i++)
+    {
+        printf("%d ", s2[i]);
+    }
+    printf("\nBitstring of Set 1 : ");
+    for (i = 0; i < usize; i++)
+    {
+        printf("%d ", bs1[i]);
+    }
+    printf("\nBitstring of Set 2 : ");
+    for (i = 0; i < usize; i++)
+    {
+        printf("%d ", bs2[i]);
+    }
+    printf("\nAnd Operation : ");
+    for (i = 0; i < usize; i++)
+    {
+        printf("%d ", and[i]);
+    }
+    printf("\nOr Operation : ");
+    for (i = 0; i < usize; i++)
+    {
+        printf("%d ", or[i]);
+    }
 }
